@@ -1,11 +1,5 @@
 ## cumulus-segment-routing
 
-## UPDATES:
-
-2/12/2019:
- - Updated to Cumulus Linux 3.7.3
- - Updated Ansible to 2.7.5
-
 ### Summary:
 
 This is an Ansible demo of the following Cumulus example:
