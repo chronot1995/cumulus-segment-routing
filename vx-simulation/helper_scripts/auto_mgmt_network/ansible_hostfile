@@ -1,7 +1,7 @@
 # Created by Topology-Converter v4.6.8
 #    Template Revision: v4.6.8
 #    https://github.com/cumulusnetworks/topology_converter
-#    using topology data from: cumulus-its-symmetric.dot
+#    using topology data from: cumulus-segment-routing.dot
 
 
 
@@ -16,11 +16,11 @@ oob-mgmt-switch ansible_host=192.168.200.6
 
 
 [leaf]
-border01 ansible_host=192.168.200.4
-leaf02 ansible_host=192.168.200.2
-leaf01 ansible_host=192.168.200.1
-fw01 ansible_host=192.168.200.5
-spine01 ansible_host=192.168.200.3
+r4 ansible_host=192.168.200.4
+r5 ansible_host=192.168.200.5
+r1 ansible_host=192.168.200.1
+r2 ansible_host=192.168.200.2
+r3 ansible_host=192.168.200.3
 
 
 
@@ -29,10 +29,8 @@ spine01 ansible_host=192.168.200.3
 
 
 [host]
-server01 ansible_host=192.168.200.11
-server03 ansible_host=192.168.200.13
-server02 ansible_host=192.168.200.12
-server04 ansible_host=192.168.200.14
+host2 ansible_host=192.168.200.12
+host1 ansible_host=192.168.200.11
 
 
 [all:vars]

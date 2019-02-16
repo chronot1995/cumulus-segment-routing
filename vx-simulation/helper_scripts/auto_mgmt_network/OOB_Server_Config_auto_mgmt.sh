@@ -2,7 +2,7 @@
 # Created by Topology-Converter v4.6.8
 #    Template Revision: v4.6.8
 #    https://github.com/cumulusnetworks/topology_converter
-#    using topology data from: cumulus-its-symmetric.dot
+#    using topology data from: cumulus-segment-routing.dot
 
 echo "################################################"
 echo "  Running Automatic Management Server Setup..."
@@ -15,13 +15,13 @@ echo " Detected vagrant user is: $username"
 #       KNOBS
 #######################
 
-REPOSITORY="https://github.com/CumulusNetworks/cumulus-its-symmetric"
-REPONAME="cumulus-its-symmetric"
+REPOSITORY="https://github.com/CumulusNetworks/cumulus-segment-routing"
+REPONAME="cumulus-segment-routing"
 
 #Install Automation Tools
 puppet=0
 ansible=1
-ansible_version=2.7.5
+ansible_version=2.3.1.0
 
 #######################
 
@@ -44,11 +44,11 @@ install_puppet(){
 }
 
 install_ansible(){
-	echo " ### Installing Ansible... ###"
-	apt-get install -qy ansible sshpass libssh-dev python-dev libssl-dev libffi-dev
-	sudo pip install pip --upgrade
-	sudo pip install setuptools --upgrade
-	sudo pip install ansible==$ansible_version --upgrade
+    echo " ### Installing Ansible... ###"
+    apt-get install -qy ansible sshpass libssh-dev python-dev libssl-dev libffi-dev
+    pip install pip --upgrade
+    pip install setuptools --upgrade
+    pip install ansible==$ansible_version --upgrade
 }
 
 ## MOTD
@@ -209,10 +209,6 @@ cat <<EOT >> /home/cumulus/.gitconfig
 [core]
     editor = vim
 EOT
-
-echo "### Adding .bash_profile to auto login as cumulus user"
-echo "sudo su - cumulus" >> /home/vagrant/.bash_profile
-echo "exit" >> /home/vagrant/.bash_profile
 
 echo "############################################"
 echo "      DONE!"

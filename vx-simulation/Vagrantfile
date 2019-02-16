@@ -1,8 +1,8 @@
 # Created by Topology-Converter v4.6.8
 #    Template Revision: v4.6.8
 #    https://github.com/cumulusnetworks/topology_converter
-#    using topology data from: cumulus-its-symmetric.dot
-#    built with the following args: topology_converter.py cumulus-its-symmetric.dot -c
+#    using topology data from: cumulus-segment-routing.dot
+#    built with the following args: topology_converter.py -c cumulus-segment-routing.dot
 #
 #    NOTE: in order to use this Vagrantfile you will need:
 #       -Vagrant(v2.0.2+) installed: http://www.vagrantup.com/downloads
@@ -55,7 +55,7 @@ if grep -q -i 'cumulus' /etc/lsb-release &> /dev/null; then
             echo "  INFO: Detected Cumulus Linux v$DISTRIB_RELEASE Release"
             if [[ $DISTRIB_RELEASE =~ ^3.[1-9].* ]]; then
                 echo "### Fixing ONIE DHCP to avoid Vagrant Interface ###"
-                echo "     Note: Installing from ONIE will undo these changes."
+                echo "     Note: Installing from ONIE will undo these changes." 
                 mkdir /tmp/foo
                 mount LABEL=ONIE-BOOT /tmp/foo
                 sed -i 's/eth0/eth1/g' /tmp/foo/grub/grub.cfg
@@ -79,7 +79,7 @@ SCRIPT
 
 Vagrant.configure("2") do |config|
 
-  simid = 1539049293
+  simid = 1550291232
 
   config.vm.provider "virtualbox" do |v|
     v.gui=false
@@ -91,9 +91,9 @@ Vagrant.configure("2") do |config|
 
   ##### DEFINE VM for oob-mgmt-server #####
   config.vm.define "oob-mgmt-server" do |device|
-
-    device.vm.hostname = "oob-mgmt-server"
-
+    
+    device.vm.hostname = "oob-mgmt-server" 
+    
     device.vm.box = "yk0/ubuntu-xenial"
     device.vm.provider "virtualbox" do |v|
       v.name = "#{simid}_oob-mgmt-server"
@@ -108,12 +108,11 @@ Vagrant.configure("2") do |config|
     # NETWORK INTERFACES
       # link for eth1 --> oob-mgmt-switch:swp1
       device.vm.network "private_network", virtualbox__intnet: "#{simid}_net10", auto_config: false , :mac => "443839000012"
-
+      
 
     device.vm.provider "virtualbox" do |vbox|
       vbox.customize ['modifyvm', :id, '--nicpromisc2', 'allow-all']
       vbox.customize ["modifyvm", :id, "--nictype1", "virtio"]
-      vbox.customize ["modifyvm", :id, "--nictype2", "virtio"]
     end
 
     # Fixes "stdin: is not a tty" and "mesg: ttyname failed : Inappropriate ioctl for device"  messages --> https://github.com/mitchellh/vagrant/issues/1673
@@ -146,7 +145,7 @@ device.vm.provision :shell , :inline => <<-udev_rule
 echo "  INFO: Adding UDEV Rule: 44:38:39:00:00:12 --> eth1"
 echo 'ACTION=="add", SUBSYSTEM=="net", ATTR{address}=="44:38:39:00:00:12", NAME="eth1", SUBSYSTEMS=="pci"' >> /etc/udev/rules.d/70-persistent-net.rules
 udev_rule
-
+     
       device.vm.provision :shell , :inline => <<-vagrant_interface_rule
 echo "  INFO: Adding UDEV Rule: Vagrant interface = vagrant"
 echo 'ACTION=="add", SUBSYSTEM=="net", ATTR{ifindex}=="2", NAME="vagrant", SUBSYSTEMS=="pci"' >> /etc/udev/rules.d/70-persistent-net.rules
@@ -162,11 +161,10 @@ end
 
   ##### DEFINE VM for oob-mgmt-switch #####
   config.vm.define "oob-mgmt-switch" do |device|
-
-    device.vm.hostname = "oob-mgmt-switch"
-
+    
+    device.vm.hostname = "oob-mgmt-switch" 
+    
     device.vm.box = "CumulusCommunity/cumulus-vx"
-    device.vm.box_version = "3.7.3"
     device.vm.provider "virtualbox" do |v|
       v.name = "#{simid}_oob-mgmt-switch"
       v.customize ["modifyvm", :id, '--audiocontroller', 'AC97', '--audio', 'Null']
@@ -180,34 +178,28 @@ end
     # NETWORK INTERFACES
       # link for swp1 --> oob-mgmt-server:eth1
       device.vm.network "private_network", virtualbox__intnet: "#{simid}_net10", auto_config: false , :mac => "443839000011"
-
-      # link for swp2 --> border01:eth0
+      
+      # link for swp2 --> r4:eth0
       device.vm.network "private_network", virtualbox__intnet: "#{simid}_net11", auto_config: false , :mac => "443839000013"
-
-      # link for swp3 --> leaf02:eth0
+      
+      # link for swp3 --> r5:eth0
       device.vm.network "private_network", virtualbox__intnet: "#{simid}_net12", auto_config: false , :mac => "443839000015"
-
-      # link for swp4 --> leaf01:eth0
+      
+      # link for swp4 --> r1:eth0
       device.vm.network "private_network", virtualbox__intnet: "#{simid}_net13", auto_config: false , :mac => "443839000017"
-
-      # link for swp5 --> fw01:eth0
+      
+      # link for swp5 --> r2:eth0
       device.vm.network "private_network", virtualbox__intnet: "#{simid}_net14", auto_config: false , :mac => "443839000019"
-
-      # link for swp6 --> spine01:eth0
+      
+      # link for swp6 --> r3:eth0
       device.vm.network "private_network", virtualbox__intnet: "#{simid}_net15", auto_config: false , :mac => "44383900001b"
-
-      # link for swp7 --> server01:eth0
+      
+      # link for swp7 --> host2:eth0
       device.vm.network "private_network", virtualbox__intnet: "#{simid}_net16", auto_config: false , :mac => "44383900001d"
-
-      # link for swp8 --> server03:eth0
+      
+      # link for swp8 --> host1:eth0
       device.vm.network "private_network", virtualbox__intnet: "#{simid}_net17", auto_config: false , :mac => "44383900001f"
-
-      # link for swp9 --> server02:eth0
-      device.vm.network "private_network", virtualbox__intnet: "#{simid}_net18", auto_config: false , :mac => "443839000021"
-
-      # link for swp10 --> server04:eth0
-      device.vm.network "private_network", virtualbox__intnet: "#{simid}_net19", auto_config: false , :mac => "443839000023"
-
+      
 
     device.vm.provider "virtualbox" do |vbox|
       vbox.customize ['modifyvm', :id, '--nicpromisc2', 'allow-all']
@@ -218,8 +210,6 @@ end
       vbox.customize ['modifyvm', :id, '--nicpromisc7', 'allow-all']
       vbox.customize ['modifyvm', :id, '--nicpromisc8', 'allow-all']
       vbox.customize ['modifyvm', :id, '--nicpromisc9', 'allow-all']
-      vbox.customize ['modifyvm', :id, '--nicpromisc10', 'allow-all']
-      vbox.customize ['modifyvm', :id, '--nicpromisc11', 'allow-all']
       vbox.customize ["modifyvm", :id, "--nictype1", "virtio"]
     end
 
@@ -227,7 +217,7 @@ end
     device.vm.provision :shell , inline: "(sudo grep -q 'mesg n' /root/.profile 2>/dev/null && sudo sed -i '/mesg n/d' /root/.profile  2>/dev/null) || true;", privileged: false
 
     #Copy over Topology.dot File
-    device.vm.provision "file", source: "cumulus-its-symmetric.dot", destination: "~/topology.dot"
+    device.vm.provision "file", source: "cumulus-segment-routing.dot", destination: "~/topology.dot"
     device.vm.provision :shell, privileged: false, inline: "sudo mv ~/topology.dot /etc/ptm.d/topology.dot"
 
 # Transfer Bridge File
@@ -278,15 +268,7 @@ udev_rule
 echo "  INFO: Adding UDEV Rule: 44:38:39:00:00:1f --> swp8"
 echo 'ACTION=="add", SUBSYSTEM=="net", ATTR{address}=="44:38:39:00:00:1f", NAME="swp8", SUBSYSTEMS=="pci"' >> /etc/udev/rules.d/70-persistent-net.rules
 udev_rule
-     device.vm.provision :shell , :inline => <<-udev_rule
-echo "  INFO: Adding UDEV Rule: 44:38:39:00:00:21 --> swp9"
-echo 'ACTION=="add", SUBSYSTEM=="net", ATTR{address}=="44:38:39:00:00:21", NAME="swp9", SUBSYSTEMS=="pci"' >> /etc/udev/rules.d/70-persistent-net.rules
-udev_rule
-     device.vm.provision :shell , :inline => <<-udev_rule
-echo "  INFO: Adding UDEV Rule: 44:38:39:00:00:23 --> swp10"
-echo 'ACTION=="add", SUBSYSTEM=="net", ATTR{address}=="44:38:39:00:00:23", NAME="swp10", SUBSYSTEMS=="pci"' >> /etc/udev/rules.d/70-persistent-net.rules
-udev_rule
-
+     
       device.vm.provision :shell , :inline => <<-vagrant_interface_rule
 echo "  INFO: Adding UDEV Rule: Vagrant interface = vagrant"
 echo 'ACTION=="add", SUBSYSTEM=="net", ATTR{ifindex}=="2", NAME="vagrant", SUBSYSTEMS=="pci"' >> /etc/udev/rules.d/70-persistent-net.rules
@@ -300,15 +282,15 @@ vagrant_interface_rule
 
 end
 
-  ##### DEFINE VM for border01 #####
-  config.vm.define "border01" do |device|
-
-    device.vm.hostname = "border01"
-
+  ##### DEFINE VM for r4 #####
+  config.vm.define "r4" do |device|
+    
+    device.vm.hostname = "r4" 
+    
     device.vm.box = "CumulusCommunity/cumulus-vx"
-    device.vm.box_version = "3.7.3"
+    device.vm.box_version = "3.6.2"
     device.vm.provider "virtualbox" do |v|
-      v.name = "#{simid}_border01"
+      v.name = "#{simid}_r4"
       v.customize ["modifyvm", :id, '--audiocontroller', 'AC97', '--audio', 'Null']
       v.memory = 1024
     end
@@ -320,13 +302,13 @@ end
     # NETWORK INTERFACES
       # link for eth0 --> oob-mgmt-switch:swp2
       device.vm.network "private_network", virtualbox__intnet: "#{simid}_net11", auto_config: false , :mac => "443839000014"
-
-      # link for swp1 --> fw01:swp1
-      device.vm.network "private_network", virtualbox__intnet: "#{simid}_net3", auto_config: false , :mac => "443839000005"
-
-      # link for swp3 --> spine01:swp3
-      device.vm.network "private_network", virtualbox__intnet: "#{simid}_net5", auto_config: false , :mac => "44383900000a"
-
+      
+      # link for swp1 --> r1:swp4
+      device.vm.network "private_network", virtualbox__intnet: "#{simid}_net2", auto_config: false , :mac => "443839000004"
+      
+      # link for swp5 --> r5:swp4
+      device.vm.network "private_network", virtualbox__intnet: "#{simid}_net5", auto_config: false , :mac => "443839000009"
+      
 
     device.vm.provider "virtualbox" do |vbox|
       vbox.customize ['modifyvm', :id, '--nicpromisc2', 'allow-all']
@@ -339,7 +321,7 @@ end
     device.vm.provision :shell , inline: "(sudo grep -q 'mesg n' /root/.profile 2>/dev/null && sudo sed -i '/mesg n/d' /root/.profile  2>/dev/null) || true;", privileged: false
 
     #Copy over Topology.dot File
-    device.vm.provision "file", source: "cumulus-its-symmetric.dot", destination: "~/topology.dot"
+    device.vm.provision "file", source: "cumulus-segment-routing.dot", destination: "~/topology.dot"
     device.vm.provision :shell, privileged: false, inline: "sudo mv ~/topology.dot /etc/ptm.d/topology.dot"
 
 
@@ -361,14 +343,14 @@ echo "  INFO: Adding UDEV Rule: 44:38:39:00:00:14 --> eth0"
 echo 'ACTION=="add", SUBSYSTEM=="net", ATTR{address}=="44:38:39:00:00:14", NAME="eth0", SUBSYSTEMS=="pci"' >> /etc/udev/rules.d/70-persistent-net.rules
 udev_rule
      device.vm.provision :shell , :inline => <<-udev_rule
-echo "  INFO: Adding UDEV Rule: 44:38:39:00:00:05 --> swp1"
-echo 'ACTION=="add", SUBSYSTEM=="net", ATTR{address}=="44:38:39:00:00:05", NAME="swp1", SUBSYSTEMS=="pci"' >> /etc/udev/rules.d/70-persistent-net.rules
+echo "  INFO: Adding UDEV Rule: 44:38:39:00:00:04 --> swp1"
+echo 'ACTION=="add", SUBSYSTEM=="net", ATTR{address}=="44:38:39:00:00:04", NAME="swp1", SUBSYSTEMS=="pci"' >> /etc/udev/rules.d/70-persistent-net.rules
 udev_rule
      device.vm.provision :shell , :inline => <<-udev_rule
-echo "  INFO: Adding UDEV Rule: 44:38:39:00:00:0a --> swp3"
-echo 'ACTION=="add", SUBSYSTEM=="net", ATTR{address}=="44:38:39:00:00:0a", NAME="swp3", SUBSYSTEMS=="pci"' >> /etc/udev/rules.d/70-persistent-net.rules
+echo "  INFO: Adding UDEV Rule: 44:38:39:00:00:09 --> swp5"
+echo 'ACTION=="add", SUBSYSTEM=="net", ATTR{address}=="44:38:39:00:00:09", NAME="swp5", SUBSYSTEMS=="pci"' >> /etc/udev/rules.d/70-persistent-net.rules
 udev_rule
-
+     
       device.vm.provision :shell , :inline => <<-vagrant_interface_rule
 echo "  INFO: Adding UDEV Rule: Vagrant interface = vagrant"
 echo 'ACTION=="add", SUBSYSTEM=="net", ATTR{ifindex}=="2", NAME="vagrant", SUBSYSTEMS=="pci"' >> /etc/udev/rules.d/70-persistent-net.rules
@@ -382,15 +364,15 @@ vagrant_interface_rule
 
 end
 
-  ##### DEFINE VM for leaf02 #####
-  config.vm.define "leaf02" do |device|
-
-    device.vm.hostname = "leaf02"
-
+  ##### DEFINE VM for r5 #####
+  config.vm.define "r5" do |device|
+    
+    device.vm.hostname = "r5" 
+    
     device.vm.box = "CumulusCommunity/cumulus-vx"
-    device.vm.box_version = "3.7.3"
+    device.vm.box_version = "3.6.2"
     device.vm.provider "virtualbox" do |v|
-      v.name = "#{simid}_leaf02"
+      v.name = "#{simid}_r5"
       v.customize ["modifyvm", :id, '--audiocontroller', 'AC97', '--audio', 'Null']
       v.memory = 1024
     end
@@ -402,22 +384,26 @@ end
     # NETWORK INTERFACES
       # link for eth0 --> oob-mgmt-switch:swp3
       device.vm.network "private_network", virtualbox__intnet: "#{simid}_net12", auto_config: false , :mac => "443839000016"
-
-      # link for swp1 --> spine01:swp2
-      device.vm.network "private_network", virtualbox__intnet: "#{simid}_net8", auto_config: false , :mac => "44383900000f"
-
-      # link for swp10 --> server03:eth1
-      device.vm.network "private_network", virtualbox__intnet: "#{simid}_net4", auto_config: false , :mac => "443839000008"
-
-      # link for swp11 --> server04:eth1
+      
+      # link for swp2 --> r2:swp5
+      device.vm.network "private_network", virtualbox__intnet: "#{simid}_net7", auto_config: false , :mac => "44383900000e"
+      
+      # link for swp3 --> r3:swp5
       device.vm.network "private_network", virtualbox__intnet: "#{simid}_net6", auto_config: false , :mac => "44383900000c"
-
+      
+      # link for swp4 --> r4:swp5
+      device.vm.network "private_network", virtualbox__intnet: "#{simid}_net5", auto_config: false , :mac => "44383900000a"
+      
+      # link for swp10 --> host2:eth1
+      device.vm.network "private_network", virtualbox__intnet: "#{simid}_net3", auto_config: false , :mac => "443839000006"
+      
 
     device.vm.provider "virtualbox" do |vbox|
       vbox.customize ['modifyvm', :id, '--nicpromisc2', 'allow-all']
       vbox.customize ['modifyvm', :id, '--nicpromisc3', 'allow-all']
       vbox.customize ['modifyvm', :id, '--nicpromisc4', 'allow-all']
       vbox.customize ['modifyvm', :id, '--nicpromisc5', 'allow-all']
+      vbox.customize ['modifyvm', :id, '--nicpromisc6', 'allow-all']
       vbox.customize ["modifyvm", :id, "--nictype1", "virtio"]
     end
 
@@ -425,7 +411,7 @@ end
     device.vm.provision :shell , inline: "(sudo grep -q 'mesg n' /root/.profile 2>/dev/null && sudo sed -i '/mesg n/d' /root/.profile  2>/dev/null) || true;", privileged: false
 
     #Copy over Topology.dot File
-    device.vm.provision "file", source: "cumulus-its-symmetric.dot", destination: "~/topology.dot"
+    device.vm.provision "file", source: "cumulus-segment-routing.dot", destination: "~/topology.dot"
     device.vm.provision :shell, privileged: false, inline: "sudo mv ~/topology.dot /etc/ptm.d/topology.dot"
 
 
@@ -447,18 +433,22 @@ echo "  INFO: Adding UDEV Rule: 44:38:39:00:00:16 --> eth0"
 echo 'ACTION=="add", SUBSYSTEM=="net", ATTR{address}=="44:38:39:00:00:16", NAME="eth0", SUBSYSTEMS=="pci"' >> /etc/udev/rules.d/70-persistent-net.rules
 udev_rule
      device.vm.provision :shell , :inline => <<-udev_rule
-echo "  INFO: Adding UDEV Rule: 44:38:39:00:00:0f --> swp1"
-echo 'ACTION=="add", SUBSYSTEM=="net", ATTR{address}=="44:38:39:00:00:0f", NAME="swp1", SUBSYSTEMS=="pci"' >> /etc/udev/rules.d/70-persistent-net.rules
+echo "  INFO: Adding UDEV Rule: 44:38:39:00:00:0e --> swp2"
+echo 'ACTION=="add", SUBSYSTEM=="net", ATTR{address}=="44:38:39:00:00:0e", NAME="swp2", SUBSYSTEMS=="pci"' >> /etc/udev/rules.d/70-persistent-net.rules
 udev_rule
      device.vm.provision :shell , :inline => <<-udev_rule
-echo "  INFO: Adding UDEV Rule: 44:38:39:00:00:08 --> swp10"
-echo 'ACTION=="add", SUBSYSTEM=="net", ATTR{address}=="44:38:39:00:00:08", NAME="swp10", SUBSYSTEMS=="pci"' >> /etc/udev/rules.d/70-persistent-net.rules
+echo "  INFO: Adding UDEV Rule: 44:38:39:00:00:0c --> swp3"
+echo 'ACTION=="add", SUBSYSTEM=="net", ATTR{address}=="44:38:39:00:00:0c", NAME="swp3", SUBSYSTEMS=="pci"' >> /etc/udev/rules.d/70-persistent-net.rules
 udev_rule
      device.vm.provision :shell , :inline => <<-udev_rule
-echo "  INFO: Adding UDEV Rule: 44:38:39:00:00:0c --> swp11"
-echo 'ACTION=="add", SUBSYSTEM=="net", ATTR{address}=="44:38:39:00:00:0c", NAME="swp11", SUBSYSTEMS=="pci"' >> /etc/udev/rules.d/70-persistent-net.rules
+echo "  INFO: Adding UDEV Rule: 44:38:39:00:00:0a --> swp4"
+echo 'ACTION=="add", SUBSYSTEM=="net", ATTR{address}=="44:38:39:00:00:0a", NAME="swp4", SUBSYSTEMS=="pci"' >> /etc/udev/rules.d/70-persistent-net.rules
 udev_rule
-
+     device.vm.provision :shell , :inline => <<-udev_rule
+echo "  INFO: Adding UDEV Rule: 44:38:39:00:00:06 --> swp10"
+echo 'ACTION=="add", SUBSYSTEM=="net", ATTR{address}=="44:38:39:00:00:06", NAME="swp10", SUBSYSTEMS=="pci"' >> /etc/udev/rules.d/70-persistent-net.rules
+udev_rule
+     
       device.vm.provision :shell , :inline => <<-vagrant_interface_rule
 echo "  INFO: Adding UDEV Rule: Vagrant interface = vagrant"
 echo 'ACTION=="add", SUBSYSTEM=="net", ATTR{ifindex}=="2", NAME="vagrant", SUBSYSTEMS=="pci"' >> /etc/udev/rules.d/70-persistent-net.rules
@@ -472,15 +462,15 @@ vagrant_interface_rule
 
 end
 
-  ##### DEFINE VM for leaf01 #####
-  config.vm.define "leaf01" do |device|
-
-    device.vm.hostname = "leaf01"
-
+  ##### DEFINE VM for r1 #####
+  config.vm.define "r1" do |device|
+    
+    device.vm.hostname = "r1" 
+    
     device.vm.box = "CumulusCommunity/cumulus-vx"
-    device.vm.box_version = "3.7.3"
+    device.vm.box_version = "3.6.2"
     device.vm.provider "virtualbox" do |v|
-      v.name = "#{simid}_leaf01"
+      v.name = "#{simid}_r1"
       v.customize ["modifyvm", :id, '--audiocontroller', 'AC97', '--audio', 'Null']
       v.memory = 1024
     end
@@ -492,16 +482,16 @@ end
     # NETWORK INTERFACES
       # link for eth0 --> oob-mgmt-switch:swp4
       device.vm.network "private_network", virtualbox__intnet: "#{simid}_net13", auto_config: false , :mac => "443839000018"
-
-      # link for swp1 --> spine01:swp1
+      
+      # link for swp2 --> r2:swp1
+      device.vm.network "private_network", virtualbox__intnet: "#{simid}_net1", auto_config: false , :mac => "443839000001"
+      
+      # link for swp4 --> r4:swp1
       device.vm.network "private_network", virtualbox__intnet: "#{simid}_net2", auto_config: false , :mac => "443839000003"
-
-      # link for swp10 --> server01:eth1
-      device.vm.network "private_network", virtualbox__intnet: "#{simid}_net1", auto_config: false , :mac => "443839000002"
-
-      # link for swp11 --> server02:eth1
-      device.vm.network "private_network", virtualbox__intnet: "#{simid}_net7", auto_config: false , :mac => "44383900000e"
-
+      
+      # link for swp10 --> host1:eth1
+      device.vm.network "private_network", virtualbox__intnet: "#{simid}_net8", auto_config: false , :mac => "443839000010"
+      
 
     device.vm.provider "virtualbox" do |vbox|
       vbox.customize ['modifyvm', :id, '--nicpromisc2', 'allow-all']
@@ -515,7 +505,7 @@ end
     device.vm.provision :shell , inline: "(sudo grep -q 'mesg n' /root/.profile 2>/dev/null && sudo sed -i '/mesg n/d' /root/.profile  2>/dev/null) || true;", privileged: false
 
     #Copy over Topology.dot File
-    device.vm.provision "file", source: "cumulus-its-symmetric.dot", destination: "~/topology.dot"
+    device.vm.provision "file", source: "cumulus-segment-routing.dot", destination: "~/topology.dot"
     device.vm.provision :shell, privileged: false, inline: "sudo mv ~/topology.dot /etc/ptm.d/topology.dot"
 
 
@@ -537,18 +527,18 @@ echo "  INFO: Adding UDEV Rule: 44:38:39:00:00:18 --> eth0"
 echo 'ACTION=="add", SUBSYSTEM=="net", ATTR{address}=="44:38:39:00:00:18", NAME="eth0", SUBSYSTEMS=="pci"' >> /etc/udev/rules.d/70-persistent-net.rules
 udev_rule
      device.vm.provision :shell , :inline => <<-udev_rule
-echo "  INFO: Adding UDEV Rule: 44:38:39:00:00:03 --> swp1"
-echo 'ACTION=="add", SUBSYSTEM=="net", ATTR{address}=="44:38:39:00:00:03", NAME="swp1", SUBSYSTEMS=="pci"' >> /etc/udev/rules.d/70-persistent-net.rules
+echo "  INFO: Adding UDEV Rule: 44:38:39:00:00:01 --> swp2"
+echo 'ACTION=="add", SUBSYSTEM=="net", ATTR{address}=="44:38:39:00:00:01", NAME="swp2", SUBSYSTEMS=="pci"' >> /etc/udev/rules.d/70-persistent-net.rules
 udev_rule
      device.vm.provision :shell , :inline => <<-udev_rule
-echo "  INFO: Adding UDEV Rule: 44:38:39:00:00:02 --> swp10"
-echo 'ACTION=="add", SUBSYSTEM=="net", ATTR{address}=="44:38:39:00:00:02", NAME="swp10", SUBSYSTEMS=="pci"' >> /etc/udev/rules.d/70-persistent-net.rules
+echo "  INFO: Adding UDEV Rule: 44:38:39:00:00:03 --> swp4"
+echo 'ACTION=="add", SUBSYSTEM=="net", ATTR{address}=="44:38:39:00:00:03", NAME="swp4", SUBSYSTEMS=="pci"' >> /etc/udev/rules.d/70-persistent-net.rules
 udev_rule
      device.vm.provision :shell , :inline => <<-udev_rule
-echo "  INFO: Adding UDEV Rule: 44:38:39:00:00:0e --> swp11"
-echo 'ACTION=="add", SUBSYSTEM=="net", ATTR{address}=="44:38:39:00:00:0e", NAME="swp11", SUBSYSTEMS=="pci"' >> /etc/udev/rules.d/70-persistent-net.rules
+echo "  INFO: Adding UDEV Rule: 44:38:39:00:00:10 --> swp10"
+echo 'ACTION=="add", SUBSYSTEM=="net", ATTR{address}=="44:38:39:00:00:10", NAME="swp10", SUBSYSTEMS=="pci"' >> /etc/udev/rules.d/70-persistent-net.rules
 udev_rule
-
+     
       device.vm.provision :shell , :inline => <<-vagrant_interface_rule
 echo "  INFO: Adding UDEV Rule: Vagrant interface = vagrant"
 echo 'ACTION=="add", SUBSYSTEM=="net", ATTR{ifindex}=="2", NAME="vagrant", SUBSYSTEMS=="pci"' >> /etc/udev/rules.d/70-persistent-net.rules
@@ -562,15 +552,15 @@ vagrant_interface_rule
 
 end
 
-  ##### DEFINE VM for fw01 #####
-  config.vm.define "fw01" do |device|
-
-    device.vm.hostname = "fw01"
-
+  ##### DEFINE VM for r2 #####
+  config.vm.define "r2" do |device|
+    
+    device.vm.hostname = "r2" 
+    
     device.vm.box = "CumulusCommunity/cumulus-vx"
-    device.vm.box_version = "3.7.3"
+    device.vm.box_version = "3.6.2"
     device.vm.provider "virtualbox" do |v|
-      v.name = "#{simid}_fw01"
+      v.name = "#{simid}_r2"
       v.customize ["modifyvm", :id, '--audiocontroller', 'AC97', '--audio', 'Null']
       v.memory = 1024
     end
@@ -582,14 +572,22 @@ end
     # NETWORK INTERFACES
       # link for eth0 --> oob-mgmt-switch:swp5
       device.vm.network "private_network", virtualbox__intnet: "#{simid}_net14", auto_config: false , :mac => "44383900001a"
-
-      # link for swp1 --> border01:swp1
-      device.vm.network "private_network", virtualbox__intnet: "#{simid}_net3", auto_config: false , :mac => "443839000006"
-
+      
+      # link for swp1 --> r1:swp2
+      device.vm.network "private_network", virtualbox__intnet: "#{simid}_net1", auto_config: false , :mac => "443839000002"
+      
+      # link for swp3 --> r3:swp2
+      device.vm.network "private_network", virtualbox__intnet: "#{simid}_net4", auto_config: false , :mac => "443839000007"
+      
+      # link for swp5 --> r5:swp2
+      device.vm.network "private_network", virtualbox__intnet: "#{simid}_net7", auto_config: false , :mac => "44383900000d"
+      
 
     device.vm.provider "virtualbox" do |vbox|
       vbox.customize ['modifyvm', :id, '--nicpromisc2', 'allow-all']
       vbox.customize ['modifyvm', :id, '--nicpromisc3', 'allow-all']
+      vbox.customize ['modifyvm', :id, '--nicpromisc4', 'allow-all']
+      vbox.customize ['modifyvm', :id, '--nicpromisc5', 'allow-all']
       vbox.customize ["modifyvm", :id, "--nictype1", "virtio"]
     end
 
@@ -597,7 +595,7 @@ end
     device.vm.provision :shell , inline: "(sudo grep -q 'mesg n' /root/.profile 2>/dev/null && sudo sed -i '/mesg n/d' /root/.profile  2>/dev/null) || true;", privileged: false
 
     #Copy over Topology.dot File
-    device.vm.provision "file", source: "cumulus-its-symmetric.dot", destination: "~/topology.dot"
+    device.vm.provision "file", source: "cumulus-segment-routing.dot", destination: "~/topology.dot"
     device.vm.provision :shell, privileged: false, inline: "sudo mv ~/topology.dot /etc/ptm.d/topology.dot"
 
 
@@ -619,10 +617,18 @@ echo "  INFO: Adding UDEV Rule: 44:38:39:00:00:1a --> eth0"
 echo 'ACTION=="add", SUBSYSTEM=="net", ATTR{address}=="44:38:39:00:00:1a", NAME="eth0", SUBSYSTEMS=="pci"' >> /etc/udev/rules.d/70-persistent-net.rules
 udev_rule
      device.vm.provision :shell , :inline => <<-udev_rule
-echo "  INFO: Adding UDEV Rule: 44:38:39:00:00:06 --> swp1"
-echo 'ACTION=="add", SUBSYSTEM=="net", ATTR{address}=="44:38:39:00:00:06", NAME="swp1", SUBSYSTEMS=="pci"' >> /etc/udev/rules.d/70-persistent-net.rules
+echo "  INFO: Adding UDEV Rule: 44:38:39:00:00:02 --> swp1"
+echo 'ACTION=="add", SUBSYSTEM=="net", ATTR{address}=="44:38:39:00:00:02", NAME="swp1", SUBSYSTEMS=="pci"' >> /etc/udev/rules.d/70-persistent-net.rules
 udev_rule
-
+     device.vm.provision :shell , :inline => <<-udev_rule
+echo "  INFO: Adding UDEV Rule: 44:38:39:00:00:07 --> swp3"
+echo 'ACTION=="add", SUBSYSTEM=="net", ATTR{address}=="44:38:39:00:00:07", NAME="swp3", SUBSYSTEMS=="pci"' >> /etc/udev/rules.d/70-persistent-net.rules
+udev_rule
+     device.vm.provision :shell , :inline => <<-udev_rule
+echo "  INFO: Adding UDEV Rule: 44:38:39:00:00:0d --> swp5"
+echo 'ACTION=="add", SUBSYSTEM=="net", ATTR{address}=="44:38:39:00:00:0d", NAME="swp5", SUBSYSTEMS=="pci"' >> /etc/udev/rules.d/70-persistent-net.rules
+udev_rule
+     
       device.vm.provision :shell , :inline => <<-vagrant_interface_rule
 echo "  INFO: Adding UDEV Rule: Vagrant interface = vagrant"
 echo 'ACTION=="add", SUBSYSTEM=="net", ATTR{ifindex}=="2", NAME="vagrant", SUBSYSTEMS=="pci"' >> /etc/udev/rules.d/70-persistent-net.rules
@@ -636,15 +642,15 @@ vagrant_interface_rule
 
 end
 
-  ##### DEFINE VM for spine01 #####
-  config.vm.define "spine01" do |device|
-
-    device.vm.hostname = "spine01"
-
+  ##### DEFINE VM for r3 #####
+  config.vm.define "r3" do |device|
+    
+    device.vm.hostname = "r3" 
+    
     device.vm.box = "CumulusCommunity/cumulus-vx"
-    device.vm.box_version = "3.7.3"
+    device.vm.box_version = "3.6.2"
     device.vm.provider "virtualbox" do |v|
-      v.name = "#{simid}_spine01"
+      v.name = "#{simid}_r3"
       v.customize ["modifyvm", :id, '--audiocontroller', 'AC97', '--audio', 'Null']
       v.memory = 1024
     end
@@ -656,22 +662,18 @@ end
     # NETWORK INTERFACES
       # link for eth0 --> oob-mgmt-switch:swp6
       device.vm.network "private_network", virtualbox__intnet: "#{simid}_net15", auto_config: false , :mac => "44383900001c"
-
-      # link for swp1 --> leaf01:swp1
-      device.vm.network "private_network", virtualbox__intnet: "#{simid}_net2", auto_config: false , :mac => "443839000004"
-
-      # link for swp2 --> leaf02:swp1
-      device.vm.network "private_network", virtualbox__intnet: "#{simid}_net8", auto_config: false , :mac => "443839000010"
-
-      # link for swp3 --> border01:swp3
-      device.vm.network "private_network", virtualbox__intnet: "#{simid}_net5", auto_config: false , :mac => "443839000009"
-
+      
+      # link for swp2 --> r2:swp3
+      device.vm.network "private_network", virtualbox__intnet: "#{simid}_net4", auto_config: false , :mac => "443839000008"
+      
+      # link for swp5 --> r5:swp3
+      device.vm.network "private_network", virtualbox__intnet: "#{simid}_net6", auto_config: false , :mac => "44383900000b"
+      
 
     device.vm.provider "virtualbox" do |vbox|
       vbox.customize ['modifyvm', :id, '--nicpromisc2', 'allow-all']
       vbox.customize ['modifyvm', :id, '--nicpromisc3', 'allow-all']
       vbox.customize ['modifyvm', :id, '--nicpromisc4', 'allow-all']
-      vbox.customize ['modifyvm', :id, '--nicpromisc5', 'allow-all']
       vbox.customize ["modifyvm", :id, "--nictype1", "virtio"]
     end
 
@@ -679,7 +681,7 @@ end
     device.vm.provision :shell , inline: "(sudo grep -q 'mesg n' /root/.profile 2>/dev/null && sudo sed -i '/mesg n/d' /root/.profile  2>/dev/null) || true;", privileged: false
 
     #Copy over Topology.dot File
-    device.vm.provision "file", source: "cumulus-its-symmetric.dot", destination: "~/topology.dot"
+    device.vm.provision "file", source: "cumulus-segment-routing.dot", destination: "~/topology.dot"
     device.vm.provision :shell, privileged: false, inline: "sudo mv ~/topology.dot /etc/ptm.d/topology.dot"
 
 
@@ -701,18 +703,14 @@ echo "  INFO: Adding UDEV Rule: 44:38:39:00:00:1c --> eth0"
 echo 'ACTION=="add", SUBSYSTEM=="net", ATTR{address}=="44:38:39:00:00:1c", NAME="eth0", SUBSYSTEMS=="pci"' >> /etc/udev/rules.d/70-persistent-net.rules
 udev_rule
      device.vm.provision :shell , :inline => <<-udev_rule
-echo "  INFO: Adding UDEV Rule: 44:38:39:00:00:04 --> swp1"
-echo 'ACTION=="add", SUBSYSTEM=="net", ATTR{address}=="44:38:39:00:00:04", NAME="swp1", SUBSYSTEMS=="pci"' >> /etc/udev/rules.d/70-persistent-net.rules
+echo "  INFO: Adding UDEV Rule: 44:38:39:00:00:08 --> swp2"
+echo 'ACTION=="add", SUBSYSTEM=="net", ATTR{address}=="44:38:39:00:00:08", NAME="swp2", SUBSYSTEMS=="pci"' >> /etc/udev/rules.d/70-persistent-net.rules
 udev_rule
      device.vm.provision :shell , :inline => <<-udev_rule
-echo "  INFO: Adding UDEV Rule: 44:38:39:00:00:10 --> swp2"
-echo 'ACTION=="add", SUBSYSTEM=="net", ATTR{address}=="44:38:39:00:00:10", NAME="swp2", SUBSYSTEMS=="pci"' >> /etc/udev/rules.d/70-persistent-net.rules
+echo "  INFO: Adding UDEV Rule: 44:38:39:00:00:0b --> swp5"
+echo 'ACTION=="add", SUBSYSTEM=="net", ATTR{address}=="44:38:39:00:00:0b", NAME="swp5", SUBSYSTEMS=="pci"' >> /etc/udev/rules.d/70-persistent-net.rules
 udev_rule
-     device.vm.provision :shell , :inline => <<-udev_rule
-echo "  INFO: Adding UDEV Rule: 44:38:39:00:00:09 --> swp3"
-echo 'ACTION=="add", SUBSYSTEM=="net", ATTR{address}=="44:38:39:00:00:09", NAME="swp3", SUBSYSTEMS=="pci"' >> /etc/udev/rules.d/70-persistent-net.rules
-udev_rule
-
+     
       device.vm.provision :shell , :inline => <<-vagrant_interface_rule
 echo "  INFO: Adding UDEV Rule: Vagrant interface = vagrant"
 echo 'ACTION=="add", SUBSYSTEM=="net", ATTR{ifindex}=="2", NAME="vagrant", SUBSYSTEMS=="pci"' >> /etc/udev/rules.d/70-persistent-net.rules
@@ -726,14 +724,14 @@ vagrant_interface_rule
 
 end
 
-  ##### DEFINE VM for server01 #####
-  config.vm.define "server01" do |device|
-
-    device.vm.hostname = "server01"
-
+  ##### DEFINE VM for host2 #####
+  config.vm.define "host2" do |device|
+    
+    device.vm.hostname = "host2" 
+    
     device.vm.box = "yk0/ubuntu-xenial"
     device.vm.provider "virtualbox" do |v|
-      v.name = "#{simid}_server01"
+      v.name = "#{simid}_host2"
       v.customize ["modifyvm", :id, '--audiocontroller', 'AC97', '--audio', 'Null']
       v.memory = 768
     end
@@ -745,10 +743,10 @@ end
     # NETWORK INTERFACES
       # link for eth0 --> oob-mgmt-switch:swp7
       device.vm.network "private_network", virtualbox__intnet: "#{simid}_net16", auto_config: false , :mac => "44383900001e"
-
-      # link for eth1 --> leaf01:swp10
-      device.vm.network "private_network", virtualbox__intnet: "#{simid}_net1", auto_config: false , :mac => "443839000001"
-
+      
+      # link for eth1 --> r5:swp10
+      device.vm.network "private_network", virtualbox__intnet: "#{simid}_net3", auto_config: false , :mac => "443839000005"
+      
 
     device.vm.provider "virtualbox" do |vbox|
       vbox.customize ['modifyvm', :id, '--nicpromisc2', 'allow-all']
@@ -762,7 +760,7 @@ end
     # Shorten Boot Process - Applies to Ubuntu Only - remove \"Wait for Network\"
     device.vm.provision :shell , inline: "sed -i 's/sleep [0-9]*/sleep 1/' /etc/init/failsafe.conf 2>/dev/null || true"
 
-
+    
     # Run the Config specified in the Node Attributes
     device.vm.provision :shell , privileged: false, :inline => 'echo "$(whoami)" > /tmp/normal_user'
     device.vm.provision :shell , path: "./helper_scripts/extra_server_config.sh"
@@ -781,10 +779,10 @@ echo "  INFO: Adding UDEV Rule: 44:38:39:00:00:1e --> eth0"
 echo 'ACTION=="add", SUBSYSTEM=="net", ATTR{address}=="44:38:39:00:00:1e", NAME="eth0", SUBSYSTEMS=="pci"' >> /etc/udev/rules.d/70-persistent-net.rules
 udev_rule
      device.vm.provision :shell , :inline => <<-udev_rule
-echo "  INFO: Adding UDEV Rule: 44:38:39:00:00:01 --> eth1"
-echo 'ACTION=="add", SUBSYSTEM=="net", ATTR{address}=="44:38:39:00:00:01", NAME="eth1", SUBSYSTEMS=="pci"' >> /etc/udev/rules.d/70-persistent-net.rules
+echo "  INFO: Adding UDEV Rule: 44:38:39:00:00:05 --> eth1"
+echo 'ACTION=="add", SUBSYSTEM=="net", ATTR{address}=="44:38:39:00:00:05", NAME="eth1", SUBSYSTEMS=="pci"' >> /etc/udev/rules.d/70-persistent-net.rules
 udev_rule
-
+     
       device.vm.provision :shell , :inline => <<-vagrant_interface_rule
 echo "  INFO: Adding UDEV Rule: Vagrant interface = vagrant"
 echo 'ACTION=="add", SUBSYSTEM=="net", ATTR{ifindex}=="2", NAME="vagrant", SUBSYSTEMS=="pci"' >> /etc/udev/rules.d/70-persistent-net.rules
@@ -798,14 +796,14 @@ vagrant_interface_rule
 
 end
 
-  ##### DEFINE VM for server03 #####
-  config.vm.define "server03" do |device|
-
-    device.vm.hostname = "server03"
-
+  ##### DEFINE VM for host1 #####
+  config.vm.define "host1" do |device|
+    
+    device.vm.hostname = "host1" 
+    
     device.vm.box = "yk0/ubuntu-xenial"
     device.vm.provider "virtualbox" do |v|
-      v.name = "#{simid}_server03"
+      v.name = "#{simid}_host1"
       v.customize ["modifyvm", :id, '--audiocontroller', 'AC97', '--audio', 'Null']
       v.memory = 768
     end
@@ -817,10 +815,10 @@ end
     # NETWORK INTERFACES
       # link for eth0 --> oob-mgmt-switch:swp8
       device.vm.network "private_network", virtualbox__intnet: "#{simid}_net17", auto_config: false , :mac => "443839000020"
-
-      # link for eth1 --> leaf02:swp10
-      device.vm.network "private_network", virtualbox__intnet: "#{simid}_net4", auto_config: false , :mac => "443839000007"
-
+      
+      # link for eth1 --> r1:swp10
+      device.vm.network "private_network", virtualbox__intnet: "#{simid}_net8", auto_config: false , :mac => "44383900000f"
+      
 
     device.vm.provider "virtualbox" do |vbox|
       vbox.customize ['modifyvm', :id, '--nicpromisc2', 'allow-all']
@@ -834,7 +832,7 @@ end
     # Shorten Boot Process - Applies to Ubuntu Only - remove \"Wait for Network\"
     device.vm.provision :shell , inline: "sed -i 's/sleep [0-9]*/sleep 1/' /etc/init/failsafe.conf 2>/dev/null || true"
 
-
+    
     # Run the Config specified in the Node Attributes
     device.vm.provision :shell , privileged: false, :inline => 'echo "$(whoami)" > /tmp/normal_user'
     device.vm.provision :shell , path: "./helper_scripts/extra_server_config.sh"
@@ -853,154 +851,10 @@ echo "  INFO: Adding UDEV Rule: 44:38:39:00:00:20 --> eth0"
 echo 'ACTION=="add", SUBSYSTEM=="net", ATTR{address}=="44:38:39:00:00:20", NAME="eth0", SUBSYSTEMS=="pci"' >> /etc/udev/rules.d/70-persistent-net.rules
 udev_rule
      device.vm.provision :shell , :inline => <<-udev_rule
-echo "  INFO: Adding UDEV Rule: 44:38:39:00:00:07 --> eth1"
-echo 'ACTION=="add", SUBSYSTEM=="net", ATTR{address}=="44:38:39:00:00:07", NAME="eth1", SUBSYSTEMS=="pci"' >> /etc/udev/rules.d/70-persistent-net.rules
+echo "  INFO: Adding UDEV Rule: 44:38:39:00:00:0f --> eth1"
+echo 'ACTION=="add", SUBSYSTEM=="net", ATTR{address}=="44:38:39:00:00:0f", NAME="eth1", SUBSYSTEMS=="pci"' >> /etc/udev/rules.d/70-persistent-net.rules
 udev_rule
-
-      device.vm.provision :shell , :inline => <<-vagrant_interface_rule
-echo "  INFO: Adding UDEV Rule: Vagrant interface = vagrant"
-echo 'ACTION=="add", SUBSYSTEM=="net", ATTR{ifindex}=="2", NAME="vagrant", SUBSYSTEMS=="pci"' >> /etc/udev/rules.d/70-persistent-net.rules
-echo "#### UDEV Rules (/etc/udev/rules.d/70-persistent-net.rules) ####"
-cat /etc/udev/rules.d/70-persistent-net.rules
-vagrant_interface_rule
-
-# Run Any Platform Specific Code and Apply the interface Re-map
-    #   (may or may not perform a reboot depending on platform)
-    device.vm.provision :shell , :inline => $script
-
-end
-
-  ##### DEFINE VM for server02 #####
-  config.vm.define "server02" do |device|
-
-    device.vm.hostname = "server02"
-
-    device.vm.box = "yk0/ubuntu-xenial"
-    device.vm.provider "virtualbox" do |v|
-      v.name = "#{simid}_server02"
-      v.customize ["modifyvm", :id, '--audiocontroller', 'AC97', '--audio', 'Null']
-      v.memory = 768
-    end
-    #   see note here: https://github.com/pradels/vagrant-libvirt#synced-folders
-    device.vm.synced_folder ".", "/vagrant", disabled: true
-
-
-
-    # NETWORK INTERFACES
-      # link for eth0 --> oob-mgmt-switch:swp9
-      device.vm.network "private_network", virtualbox__intnet: "#{simid}_net18", auto_config: false , :mac => "443839000022"
-
-      # link for eth1 --> leaf01:swp11
-      device.vm.network "private_network", virtualbox__intnet: "#{simid}_net7", auto_config: false , :mac => "44383900000d"
-
-
-    device.vm.provider "virtualbox" do |vbox|
-      vbox.customize ['modifyvm', :id, '--nicpromisc2', 'allow-all']
-      vbox.customize ['modifyvm', :id, '--nicpromisc3', 'allow-all']
-      vbox.customize ["modifyvm", :id, "--nictype1", "virtio"]
-    end
-
-    # Fixes "stdin: is not a tty" and "mesg: ttyname failed : Inappropriate ioctl for device"  messages --> https://github.com/mitchellh/vagrant/issues/1673
-    device.vm.provision :shell , inline: "(sudo grep -q 'mesg n' /root/.profile 2>/dev/null && sudo sed -i '/mesg n/d' /root/.profile  2>/dev/null) || true;", privileged: false
-
-    # Shorten Boot Process - Applies to Ubuntu Only - remove \"Wait for Network\"
-    device.vm.provision :shell , inline: "sed -i 's/sleep [0-9]*/sleep 1/' /etc/init/failsafe.conf 2>/dev/null || true"
-
-
-    # Run the Config specified in the Node Attributes
-    device.vm.provision :shell , privileged: false, :inline => 'echo "$(whoami)" > /tmp/normal_user'
-    device.vm.provision :shell , path: "./helper_scripts/extra_server_config.sh"
-
-
-    # Install Rules for the interface re-map
-    device.vm.provision :shell , :inline => <<-delete_udev_directory
-if [ -d "/etc/udev/rules.d/70-persistent-net.rules" ]; then
-    rm -rfv /etc/udev/rules.d/70-persistent-net.rules &> /dev/null
-fi
-rm -rfv /etc/udev/rules.d/70-persistent-net.rules &> /dev/null
-delete_udev_directory
-
-device.vm.provision :shell , :inline => <<-udev_rule
-echo "  INFO: Adding UDEV Rule: 44:38:39:00:00:22 --> eth0"
-echo 'ACTION=="add", SUBSYSTEM=="net", ATTR{address}=="44:38:39:00:00:22", NAME="eth0", SUBSYSTEMS=="pci"' >> /etc/udev/rules.d/70-persistent-net.rules
-udev_rule
-     device.vm.provision :shell , :inline => <<-udev_rule
-echo "  INFO: Adding UDEV Rule: 44:38:39:00:00:0d --> eth1"
-echo 'ACTION=="add", SUBSYSTEM=="net", ATTR{address}=="44:38:39:00:00:0d", NAME="eth1", SUBSYSTEMS=="pci"' >> /etc/udev/rules.d/70-persistent-net.rules
-udev_rule
-
-      device.vm.provision :shell , :inline => <<-vagrant_interface_rule
-echo "  INFO: Adding UDEV Rule: Vagrant interface = vagrant"
-echo 'ACTION=="add", SUBSYSTEM=="net", ATTR{ifindex}=="2", NAME="vagrant", SUBSYSTEMS=="pci"' >> /etc/udev/rules.d/70-persistent-net.rules
-echo "#### UDEV Rules (/etc/udev/rules.d/70-persistent-net.rules) ####"
-cat /etc/udev/rules.d/70-persistent-net.rules
-vagrant_interface_rule
-
-# Run Any Platform Specific Code and Apply the interface Re-map
-    #   (may or may not perform a reboot depending on platform)
-    device.vm.provision :shell , :inline => $script
-
-end
-
-  ##### DEFINE VM for server04 #####
-  config.vm.define "server04" do |device|
-
-    device.vm.hostname = "server04"
-
-    device.vm.box = "yk0/ubuntu-xenial"
-    device.vm.provider "virtualbox" do |v|
-      v.name = "#{simid}_server04"
-      v.customize ["modifyvm", :id, '--audiocontroller', 'AC97', '--audio', 'Null']
-      v.memory = 768
-    end
-    #   see note here: https://github.com/pradels/vagrant-libvirt#synced-folders
-    device.vm.synced_folder ".", "/vagrant", disabled: true
-
-
-
-    # NETWORK INTERFACES
-      # link for eth0 --> oob-mgmt-switch:swp10
-      device.vm.network "private_network", virtualbox__intnet: "#{simid}_net19", auto_config: false , :mac => "443839000024"
-
-      # link for eth1 --> leaf02:swp11
-      device.vm.network "private_network", virtualbox__intnet: "#{simid}_net6", auto_config: false , :mac => "44383900000b"
-
-
-    device.vm.provider "virtualbox" do |vbox|
-      vbox.customize ['modifyvm', :id, '--nicpromisc2', 'allow-all']
-      vbox.customize ['modifyvm', :id, '--nicpromisc3', 'allow-all']
-      vbox.customize ["modifyvm", :id, "--nictype1", "virtio"]
-    end
-
-    # Fixes "stdin: is not a tty" and "mesg: ttyname failed : Inappropriate ioctl for device"  messages --> https://github.com/mitchellh/vagrant/issues/1673
-    device.vm.provision :shell , inline: "(sudo grep -q 'mesg n' /root/.profile 2>/dev/null && sudo sed -i '/mesg n/d' /root/.profile  2>/dev/null) || true;", privileged: false
-
-    # Shorten Boot Process - Applies to Ubuntu Only - remove \"Wait for Network\"
-    device.vm.provision :shell , inline: "sed -i 's/sleep [0-9]*/sleep 1/' /etc/init/failsafe.conf 2>/dev/null || true"
-
-
-    # Run the Config specified in the Node Attributes
-    device.vm.provision :shell , privileged: false, :inline => 'echo "$(whoami)" > /tmp/normal_user'
-    device.vm.provision :shell , path: "./helper_scripts/extra_server_config.sh"
-
-
-    # Install Rules for the interface re-map
-    device.vm.provision :shell , :inline => <<-delete_udev_directory
-if [ -d "/etc/udev/rules.d/70-persistent-net.rules" ]; then
-    rm -rfv /etc/udev/rules.d/70-persistent-net.rules &> /dev/null
-fi
-rm -rfv /etc/udev/rules.d/70-persistent-net.rules &> /dev/null
-delete_udev_directory
-
-device.vm.provision :shell , :inline => <<-udev_rule
-echo "  INFO: Adding UDEV Rule: 44:38:39:00:00:24 --> eth0"
-echo 'ACTION=="add", SUBSYSTEM=="net", ATTR{address}=="44:38:39:00:00:24", NAME="eth0", SUBSYSTEMS=="pci"' >> /etc/udev/rules.d/70-persistent-net.rules
-udev_rule
-     device.vm.provision :shell , :inline => <<-udev_rule
-echo "  INFO: Adding UDEV Rule: 44:38:39:00:00:0b --> eth1"
-echo 'ACTION=="add", SUBSYSTEM=="net", ATTR{address}=="44:38:39:00:00:0b", NAME="eth1", SUBSYSTEMS=="pci"' >> /etc/udev/rules.d/70-persistent-net.rules
-udev_rule
-
+     
       device.vm.provision :shell , :inline => <<-vagrant_interface_rule
 echo "  INFO: Adding UDEV Rule: Vagrant interface = vagrant"
 echo 'ACTION=="add", SUBSYSTEM=="net", ATTR{ifindex}=="2", NAME="vagrant", SUBSYSTEMS=="pci"' >> /etc/udev/rules.d/70-persistent-net.rules

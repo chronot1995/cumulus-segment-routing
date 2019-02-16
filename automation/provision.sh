@@ -1,2 +1,2 @@
 #!/bin/bash
-ansible-playbook cumulus-its-symmetric.yml
+ansible-playbook cumulus-segment-routing.yml

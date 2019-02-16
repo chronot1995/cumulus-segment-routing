@@ -14,9 +14,6 @@
   pause:
     seconds: 5
 
-## - name: Bring up eth1
-##  shell: ifdown eth1 && ifup eth1
-
 - name: reboot
   command: /sbin/shutdown -r +1
   async: 0

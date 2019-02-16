@@ -1,5 +1,5 @@
 #####
-# Host config for cumulus-its-symmetric
+# Host config for cumulus-segment-routing
 #####
 
 - hosts: switches
@@ -11,4 +11,3 @@
   become: true
   roles:
   - servers
-  - serverExtras
