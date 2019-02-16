@@ -1,0 +1,108 @@
+auto lo
+iface lo inet loopback
+    address 10.1.1.1/32
+
+auto swp1
+iface swp1
+    mtu 9216
+
+auto swp10
+iface swp10
+    bridge-access 11
+    post-up ip link set swp10 promisc on
+
+auto swp11
+iface swp11
+    bridge-access 22
+    post-up ip link set swp11 promisc on
+
+auto L3VNI_BLUE
+iface L3VNI_BLUE
+    bridge-access 4002
+    mstpctl-bpduguard yes
+    mstpctl-portbpdufilter yes
+    vxlan-id 104002
+    vxlan-local-tunnelip 10.1.1.1
+
+auto L3VNI_RED
+iface L3VNI_RED
+    bridge-access 4001
+    mstpctl-bpduguard yes
+    mstpctl-portbpdufilter yes
+    vxlan-id 104001
+    vxlan-local-tunnelip 10.1.1.1
+
+auto BLUE
+iface BLUE
+    vrf-table auto
+
+auto RED
+iface RED
+    vrf-table auto
+
+auto bridge
+iface bridge
+    bridge-ports L3VNI_RED L3VNI_BLUE swp10 swp11 vni11 vni22
+    bridge-vids 11 22 4001 4002
+    bridge-vlan-aware yes
+
+auto vagrant
+iface vagrant inet dhcp
+
+auto eth0
+iface eth0 inet dhcp
+    vrf mgmt
+
+auto mgmt
+iface mgmt
+    address 127.0.0.1/8
+    vrf-table auto
+
+auto vlan11
+iface vlan11
+    address 192.168.11.11/24
+    address-virtual 44:38:39:ff:11:22 192.168.11.1/24
+    vlan-id 11
+    vlan-raw-device bridge
+    vrf RED
+
+auto vlan22
+iface vlan22
+    address 192.168.22.22/24
+    address-virtual 44:38:39:ff:11:22 192.168.22.1/24
+    vlan-id 22
+    vlan-raw-device bridge
+    vrf BLUE
+
+auto vlan4001
+iface vlan4001
+    hwaddress 44:38:39:FF:01:11
+    vlan-id 4001
+    vlan-raw-device bridge
+    vrf RED
+
+auto vlan4002
+iface vlan4002
+    hwaddress 44:38:39:FF:02:11
+    vlan-id 4002
+    vlan-raw-device bridge
+    vrf BLUE
+
+
+auto vni11
+iface vni11
+    bridge-access 11
+    bridge-learning off
+    mstpctl-bpduguard yes
+    mstpctl-portbpdufilter yes
+    vxlan-id 11
+    vxlan-local-tunnelip 10.1.1.1
+
+auto vni22
+iface vni22
+    bridge-access 22
+    bridge-learning off
+    mstpctl-bpduguard yes
+    mstpctl-portbpdufilter yes
+    vxlan-id 22
+    vxlan-local-tunnelip 10.1.1.1
