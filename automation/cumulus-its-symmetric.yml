@@ -1,0 +1,14 @@
+#####
+# Host config for cumulus-its-symmetric
+#####
+
+- hosts: switches
+  become: true
+  roles:
+  - switches
+
+- hosts: servers
+  become: true
+  roles:
+  - servers
+  - serverExtras
