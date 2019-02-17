@@ -1,9 +1,5 @@
 ---
 
-- name: Waiting for route convergence
-  pause:
-    seconds: 30
-
 - name: Copy interfaces configuration
   template:
     src: interfaces.j2
