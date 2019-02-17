@@ -4,7 +4,7 @@
 
 ### Summary:
 
-This is an Ansible demo of the following Cumulus example:
+This is a slightly modified Ansible demo of the following Cumulus Linux Segment Routing example:
 
 https://docs.cumulusnetworks.com/display/DOCS/Segment+Routing#SegmentRouting-ExampleConfiguration
 
