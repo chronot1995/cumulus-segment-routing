@@ -14,6 +14,6 @@ graph training {
  "r3":"swp5" -- "r5":"swp3"
  "r4":"swp5" -- "r5":"swp4"
  "host1":"eth1" -- "r1":"swp10"
- "host2":"eth1" -- "r5":"swp10"
+ "host2":"eth1" -- "r3":"swp10"
 
  }

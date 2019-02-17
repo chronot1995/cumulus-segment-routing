@@ -1,0 +1,10 @@
+---
+
+- name: Sleep for servers to reinitialize
+  pause:
+    seconds: 60
+
+- name: Install traceroute
+  apt:
+    name: traceroute
+    update_cache: yes
