@@ -8,7 +8,7 @@
 
 - name: Sleep for server to disconnect
   pause:
-    seconds: 5
+    seconds: 10
 
 - name: reboot
   reboot:
