@@ -1,4 +1,12 @@
 ---
+
+- name: Verify Minimum Software Version
+  assert:
+    that: "{{ansible_lsb.release is version_compare('3.7.2', '>=') }}"
+    msg: >
+      "Cumulus Linux version must be 3.7.2 or later.
+      Version {{ansible_lsb.release}} detected"
+
 - name: Copy FRR daemons file
   copy:
     src: daemons
