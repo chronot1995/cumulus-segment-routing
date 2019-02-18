@@ -8,9 +8,12 @@ service integrated-vtysh-config
 log syslog informational
 !
 router bgp 65333
- bgp bestpath as-path multipath-relax
- neighbor swp2 interface remote-as external
- neighbor swp5 interface remote-as external
+ bgp router-id 10.3.3.3
+ no bgp default ipv4-unicast
+ neighbor EBGP peer-group
+ neighbor EBGP remote-as external
+ neighbor swp2 interface peer-group EBGP
+ neighbor swp5 interface peer-group EBGP
  !
  address-family ipv4 unicast
   network 10.1.1.1/32 label-index 1
@@ -19,6 +22,10 @@ router bgp 65333
   network 10.4.4.4/32 label-index 4
   network 10.5.5.5/32 label-index 5
   redistribute connected
+ exit-address-family
+ !
+ address-family ipv4 labeled-unicast
+  neighbor EBGP activate
  exit-address-family
 !
 mpls label global-block 100 200
