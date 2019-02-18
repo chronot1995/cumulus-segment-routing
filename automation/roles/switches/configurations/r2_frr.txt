@@ -23,6 +23,7 @@ router bgp 65222
   network 10.4.4.4/32 label-index 4
   network 10.5.5.5/32 label-index 5
   redistribute connected
+  neighbor EBGP activate
  exit-address-family
  !
  address-family ipv4 labeled-unicast
