@@ -13,8 +13,15 @@ router bgp 65444
  neighbor swp5 interface remote-as external
  !
  address-family ipv4 unicast
+  network 10.1.1.1/32 label-index 1
+  network 10.2.2.2/32 label-index 2
+  network 10.3.3.3/32 label-index 3
+  network 10.4.4.4/32 label-index 4
+  network 10.5.5.5/32 label-index 5
   redistribute connected
  exit-address-family
+!
+mpls label global-block 100 200
 !
 line vty
 !
