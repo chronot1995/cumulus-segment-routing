@@ -9,6 +9,7 @@ log syslog informational
 !
 router bgp 65111
  bgp router-id 10.1.1.1
+ no bgp default ipv4-unicast
  neighbor EBGP peer-group
  neighbor EBGP remote-as external
  neighbor swp2 interface peer-group EBGP
