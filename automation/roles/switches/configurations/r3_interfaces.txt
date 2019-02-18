@@ -8,6 +8,10 @@ iface swp2
 auto swp5
 iface swp5
 
+auto swp10
+iface swp10
+    address 192.168.22.1/24
+
 auto vagrant
 iface vagrant inet dhcp
 
