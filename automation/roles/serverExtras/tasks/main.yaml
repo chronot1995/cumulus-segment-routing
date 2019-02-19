@@ -10,3 +10,8 @@
   apt:
     name: ['ifupdown','ifenslave','netplan.io']
     state: absent
+
+# Add the mpls_iptunnel module
+- modprobe:
+    name: mpls_iptunnel
+    state: present
