@@ -4,13 +4,16 @@ iface lo inet loopback
 
 auto swp2
 iface swp2
+    mpls-enable yes
 
 auto swp5
 iface swp5
+    mpls-enable yes
 
 auto swp10
 iface swp10
     address 192.168.22.1/24
+    mpls-enable yes
 
 auto vagrant
 iface vagrant inet dhcp

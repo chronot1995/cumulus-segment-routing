@@ -4,9 +4,11 @@ iface lo inet loopback
 
 auto swp1
 iface swp1
+    mpls-enable yes
 
 auto swp5
 iface swp5
+    mpls-enable yes
 
 auto vagrant
 iface vagrant inet dhcp
