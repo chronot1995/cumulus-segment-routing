@@ -4,3 +4,9 @@
   apt:
     name: traceroute
     update_cache: yes
+
+
+- name: Remove ifupdown1 and netplan
+  apt:
+    name: ['ifupdown','ifenslave','netplan.io']
+    state: absent
