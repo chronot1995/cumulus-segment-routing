@@ -84,7 +84,8 @@ Peer groups 1, using 64 bytes of memory
 
 Neighbor        V         AS MsgRcvd MsgSent   TblVer  InQ OutQ  Up/Down State/PfxRcd
 r2(swp2)        4      65222     599     598        0    0    0 00:29:27            3
-r4(swp4)        4      65444     596     597        0    0    0 00:29:26            1```
+r4(swp4)        4      65444     596     597        0    0    0 00:29:26            1
+```
 
 2.
 
@@ -101,14 +102,16 @@ r4(swp4)        4      65444     596     597        0    0    0 00:29:26        
   Client list: bgp(fd 16)
 10.1.1.5/32
   Label: 105, Label Index: 5
-  Client list: bgp(fd 16)```
+  Client list: bgp(fd 16)
+```
 
 3. pings between loopbacks:
 
 ```r1# ping 10.1.1.5
 PING 10.1.1.5 (10.1.1.5) 56(84) bytes of data.
 64 bytes from 10.1.1.5: icmp_seq=1 ttl=63 time=1.57 ms
-64 bytes from 10.1.1.5: icmp_seq=2 ttl=63 time=1.82 ms```
+64 bytes from 10.1.1.5: icmp_seq=2 ttl=63 time=1.82 ms
+```
 
 4. LSR routing information:
 
@@ -117,7 +120,8 @@ B>* 10.1.1.2/32 [20/0] via fe80::4638:39ff:fe00:2, swp2, label implicit-null, 00
 B>* 10.1.1.3/32 [20/0] via fe80::4638:39ff:fe00:2, swp2, label 103, 00:32:48
 B>* 10.1.1.4/32 [20/0] via fe80::4638:39ff:fe00:4, swp4, label implicit-null, 00:32:48
 B>* 10.1.1.5/32 [20/0] via fe80::4638:39ff:fe00:2, swp2, label 105, 00:32:48
-C>* 192.168.11.0/24 is directly connected, swp10, 00:32:51```
+C>* 192.168.11.0/24 is directly connected, swp10, 00:32:51
+```
 
 The "implicit-null" labels indicate that this route is one hop away from the current router. This means that the current router is the Penultimate Hop Popping (PHP) router
 
@@ -129,7 +133,8 @@ The "implicit-null" labels indicate that this route is one hop away from the cur
 10.0.2.0/24 dev vagrant proto kernel scope link src 10.0.2.15
 192.168.11.0/24 dev eth1 proto kernel scope link src 192.168.11.111
 192.168.22.222  encap mpls 103 via 192.168.11.1 dev eth1
-192.168.200.0/24 dev eth0 proto kernel scope link src 192.168.200.11```
+192.168.200.0/24 dev eth0 proto kernel scope link src 192.168.200.11
+```
 
 This will show what is currently installed within the kernel of the host.
 
@@ -137,11 +142,13 @@ This will show what is currently installed within the kernel of the host.
 
 We will remove the relaxed configuration on host1 with the following:
 
-```sudo ip route del 192.168.22.222/32 encap mpls 103 via inet 192.168.11.1```
+```sudo ip route del 192.168.22.222/32 encap mpls 103 via inet 192.168.11.1
+```
 
 Now, we will force traffic to go through r4, r5, and then to r3 with the following:
 
-```sudo ip route add 192.168.22.222/32 encap mpls 104/105/103 via inet 192.168.11.1```
+```sudo ip route add 192.168.22.222/32 encap mpls 104/105/103 via inet 192.168.11.1
+```
 
 We now see the following in the kernel:
 
@@ -151,7 +158,8 @@ We now see the following in the kernel:
 10.0.2.0/24 dev vagrant proto kernel scope link src 10.0.2.15
 192.168.11.0/24 dev eth1 proto kernel scope link src 192.168.11.111
 192.168.22.222  encap mpls  104/105/103 via 192.168.11.1 dev eth1
-192.168.200.0/24 dev eth0 proto kernel scope link src 192.168.200.11```
+192.168.200.0/24 dev eth0 proto kernel scope link src 192.168.200.11
+```
 
 ### Errata
 
