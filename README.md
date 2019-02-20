@@ -87,7 +87,8 @@ One will see the labels that have been shared in the "IPv4 Labeled Unicast" tabl
 
 "show mpls fec"
 
-```10.1.1.2/32
+```
+10.1.1.2/32
   Label: 102, Label Index: 2
   Client list: bgp(fd 16)
 10.1.1.3/32
