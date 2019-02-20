@@ -63,10 +63,6 @@ Helpful FRR and MPLS troubleshooting commands:
 - show mpls table
 - show mpls fec
 
-- net show bgp vrf <name> summary
-- net show interface | grep -i UP
-- net show lldp
-
 Helpful Linux troubleshooting commands:
 
 - ip r s
@@ -87,7 +83,7 @@ r2(swp2)        4      65222     599     598        0    0    0 00:29:27        
 r4(swp4)        4      65444     596     597        0    0    0 00:29:26            1
 ```
 
-2.
+2. Show the MPLS Forwarding Equivalency Classes:
 
 "show mpls fec"
 
@@ -105,7 +101,7 @@ r4(swp4)        4      65444     596     597        0    0    0 00:29:26        
   Client list: bgp(fd 16)
 ```
 
-3. pings between loopbacks:
+3. Pings between LSRs:
 
 ```r1# ping 10.1.1.5
 PING 10.1.1.5 (10.1.1.5) 56(84) bytes of data.
@@ -113,7 +109,11 @@ PING 10.1.1.5 (10.1.1.5) 56(84) bytes of data.
 64 bytes from 10.1.1.5: icmp_seq=2 ttl=63 time=1.82 ms
 ```
 
+In this demo, you will be able to ping all between all of the loopback addresses.
+
 4. LSR routing information:
+
+"show ip route"
 
 ```C>* 10.1.1.1/32 is directly connected, lo, 00:32:51
 B>* 10.1.1.2/32 [20/0] via fe80::4638:39ff:fe00:2, swp2, label implicit-null, 00:32:49
@@ -191,7 +191,7 @@ Will be replaced with the following:
     #Install Automation Tools
     puppet=0
     ansible=1
-    ansible_version=2.7.5
+    ansible_version=2.7.7
 
 The following stanza will replace the install_ansible function:
 
