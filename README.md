@@ -111,7 +111,7 @@ PING 10.1.1.5 (10.1.1.5) 56(84) bytes of data.
 64 bytes from 10.1.1.5: icmp_seq=2 ttl=63 time=1.82 ms
 ```
 
-In this demo, you will be able to ping all between all of the loopback addresses.
+In this demo, you will be able to ping all of the loopback addresses from any LSR.
 
 4. LSR routing information:
 
@@ -142,7 +142,9 @@ default via 10.0.2.2 dev vagrant
 
 This will show what is currently installed within the kernel of the host.
 
-6. The configuration example in this demo will take a relaxed label path in order to reach the destination. There is also the option of providing a strict path of LSRs to traverse.
+6. Strict LSR Forwarding
+
+The configuration example in this demo will take a relaxed label path in order to reach the destination. There is also the option of providing a strict path of LSRs to traverse.
 
 We will remove the relaxed configuration on host1 with the following:
 
