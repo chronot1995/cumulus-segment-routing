@@ -1,7 +1,5 @@
 ## cumulus-segment-routing
 
-## HUGE WORK IN PROGRESS ##
-
 ### Summary:
 
 This is an Ansible demo of the following Cumulus Linux Segment Routing example:
