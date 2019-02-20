@@ -31,8 +31,8 @@ which apt &> /dev/null
 if [ "$?" == "0" ]; then
     #These lines will be used when booting on a debian-based box
     echo -e "note: ubuntu device detected"
-    #Install LLDP
-    apt-get update -qy && apt-get install lldpd -qy
+    #Install LLDP and Python
+    apt-get update -qy && apt-get install lldpd python -qy
     echo "configure lldp portidsubtype ifname" > /etc/lldpd.d/port_info.conf
 
     #Replace existing network interfaces file

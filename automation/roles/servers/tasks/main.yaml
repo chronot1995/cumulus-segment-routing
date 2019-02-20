@@ -6,6 +6,13 @@
     dest: /etc/network/interfaces
     backup: yes
 
+#- name: Copy interfaces configuration
+#  copy:
+#    src: configurations/{{inventory_hostname}}_interfaces.txt
+#    dest: /etc/network/interfaces
+#    backup: yes
+#  notify: reload networking
+
 - name: Sleep for server to disconnect
   pause:
     seconds: 10
