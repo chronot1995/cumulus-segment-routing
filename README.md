@@ -67,7 +67,7 @@ Helpful Linux troubleshooting commands:
 
 - ip r s
 
-### MPLS Troubleshooting
+### Segment Routing Troubleshooting
 
 1. "show ip bgp summary"
 
@@ -82,6 +82,8 @@ Neighbor        V         AS MsgRcvd MsgSent   TblVer  InQ OutQ  Up/Down State/P
 r2(swp2)        4      65222     599     598        0    0    0 00:29:27            3
 r4(swp4)        4      65444     596     597        0    0    0 00:29:26            1
 ```
+
+One will see the labels that have been shared in the "IPv4 Labeled Unicast" table.
 
 2. Show the MPLS Forwarding Equivalency Classes:
 
