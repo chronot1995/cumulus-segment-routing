@@ -104,7 +104,8 @@ One will see the labels that have been shared in the "IPv4 Labeled Unicast" tabl
 
 3. Pings between LSRs:
 
-```r1# ping 10.1.1.5
+```
+r1# ping 10.1.1.5
 PING 10.1.1.5 (10.1.1.5) 56(84) bytes of data.
 64 bytes from 10.1.1.5: icmp_seq=1 ttl=63 time=1.57 ms
 64 bytes from 10.1.1.5: icmp_seq=2 ttl=63 time=1.82 ms
@@ -116,7 +117,8 @@ In this demo, you will be able to ping all between all of the loopback addresses
 
 "show ip route"
 
-```C>* 10.1.1.1/32 is directly connected, lo, 00:32:51
+```
+C>* 10.1.1.1/32 is directly connected, lo, 00:32:51
 B>* 10.1.1.2/32 [20/0] via fe80::4638:39ff:fe00:2, swp2, label implicit-null, 00:32:49
 B>* 10.1.1.3/32 [20/0] via fe80::4638:39ff:fe00:2, swp2, label 103, 00:32:48
 B>* 10.1.1.4/32 [20/0] via fe80::4638:39ff:fe00:4, swp4, label implicit-null, 00:32:48
@@ -130,7 +132,8 @@ The "implicit-null" labels indicate that this route is one hop away from the cur
 
 "ip r s"
 
-```default via 10.0.2.2 dev vagrant
+```
+default via 10.0.2.2 dev vagrant
 10.0.2.0/24 dev vagrant proto kernel scope link src 10.0.2.15
 192.168.11.0/24 dev eth1 proto kernel scope link src 192.168.11.111
 192.168.22.222  encap mpls 103 via 192.168.11.1 dev eth1
@@ -143,19 +146,22 @@ This will show what is currently installed within the kernel of the host.
 
 We will remove the relaxed configuration on host1 with the following:
 
-```sudo ip route del 192.168.22.222/32 encap mpls 103 via inet 192.168.11.1
+```
+sudo ip route del 192.168.22.222/32 encap mpls 103 via inet 192.168.11.1
 ```
 
 Now, we will force traffic to go through r4, r5, and then to r3 with the following:
 
-```sudo ip route add 192.168.22.222/32 encap mpls 104/105/103 via inet 192.168.11.1
+```
+sudo ip route add 192.168.22.222/32 encap mpls 104/105/103 via inet 192.168.11.1
 ```
 
 We now see the following in the kernel:
 
 "ip r s"
 
-```default via 10.0.2.2 dev vagrant
+```
+default via 10.0.2.2 dev vagrant
 10.0.2.0/24 dev vagrant proto kernel scope link src 10.0.2.15
 192.168.11.0/24 dev eth1 proto kernel scope link src 192.168.11.111
 192.168.22.222  encap mpls  104/105/103 via 192.168.11.1 dev eth1
