@@ -191,7 +191,7 @@ We will remove the relaxed configuration on host1 with the following:
 sudo ip route del 192.168.22.222/32 encap mpls 103 via inet 192.168.11.1
 ```
 
-Now, we will force traffic to go through r3, r4, and then to r5 with the following:
+Now, we will force traffic to go through r4, r5, and then to r3 with the following:
 
 ```
 sudo ip route add 192.168.22.222/32 encap mpls 104/105/103 via inet 192.168.11.1
