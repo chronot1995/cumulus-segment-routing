@@ -106,7 +106,7 @@ Helpful Linux troubleshooting commands:
 
 ### Segment Routing Troubleshooting
 
-1. "show ip bgp summary"
+1. sudo vtysh -c "show ip bgp summary"
 
 ```IPv4 Labeled Unicast Summary:
 BGP router identifier 10.1.1.1, local AS number 65111 vrf-id 0
@@ -124,7 +124,7 @@ One will see the labels that have been shared in the "IPv4 Labeled Unicast" tabl
 
 2. Show the MPLS Forwarding Equivalency Classes:
 
-"show mpls fec"
+sudo vtysh -c "show mpls fec"
 
 ```
 10.1.1.2/32
@@ -154,7 +154,7 @@ In this demo, you will be able to ping all of the loopback addresses from any LS
 
 4. LSR routing information:
 
-"show ip route"
+sudo vtysh -c "show ip route"
 
 ```
 C>* 10.1.1.1/32 is directly connected, lo, 00:32:51
@@ -221,7 +221,7 @@ default via 10.0.2.2 dev vagrant
 
 3. The following command was used to run the Topology Converter within the vx-simulation directory:
 
-    ```./topology_converter.py cumulus-ansible-beginner-bgp-j2.dot -c```
+    ```./topology_converter.py cumulus-segment-routing.dot -c```
 
 After the above command is executed, the following configuration changes are necessary:
 
