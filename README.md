@@ -219,9 +219,10 @@ default via 10.0.2.2 dev vagrant
 
     https://github.com/CumulusNetworks/topology_converter
 
-3. The following command was used to run the Topology Converter within the vx-simulation directory:
+3. The following command was used to run the Topology Converter within the appropriate vx-sim directory:
 
-    ```./topology_converter.py cumulus-segment-routing.dot -c```
+    ```./topology_converter.py cumulus-segment-routing.dot -c --provider=virtualbox```
+    ```./topology_converter.py cumulus-segment-routing.dot -c --provider=libvirt```
 
 After the above command is executed, the following configuration changes are necessary:
 

@@ -937,7 +937,7 @@ end
 
     device.vm.hostname = "host1"
 
-    device.vm.box = "yk0/ubuntu-xenial"
+    device.vm.box = "generic/ubuntu1804"
 
     device.vm.provider :libvirt do |v|
       v.nic_model_type = 'e1000'
@@ -1021,7 +1021,7 @@ end
 
     device.vm.hostname = "host2"
 
-    device.vm.box = "yk0/ubuntu-xenial"
+    device.vm.box = "generic/ubuntu1804"
 
     device.vm.provider :libvirt do |v|
       v.nic_model_type = 'e1000'
