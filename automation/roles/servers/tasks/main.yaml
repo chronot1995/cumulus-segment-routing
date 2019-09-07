@@ -13,3 +13,6 @@
 - name: reboot
   reboot:
     pre_reboot_delay: 60
+
+- name: Flush Handlers, best practice
+  meta: flush_handlers

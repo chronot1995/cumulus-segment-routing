@@ -23,3 +23,6 @@
 - name: Add MPLS Routes to host2
   command: ip route add 192.168.11.111/32 encap mpls 101 via inet 192.168.22.1
   when: inventory_hostname == "host2"
+
+- name: Flush Handlers, best practice
+  meta: flush_handlers

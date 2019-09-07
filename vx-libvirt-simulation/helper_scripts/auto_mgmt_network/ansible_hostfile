@@ -1,0 +1,38 @@
+# Created by Topology-Converter v4.7.0
+#    Template Revision: v4.7.0
+#    https://github.com/cumulusnetworks/topology_converter
+#    using topology data from: cumulus-segment-routing.dot
+
+
+
+
+[oob-switch]
+oob-mgmt-switch ansible_host=192.168.200.6
+
+
+
+
+
+
+
+[leaf]
+r1 ansible_host=192.168.200.1
+r2 ansible_host=192.168.200.2
+r3 ansible_host=192.168.200.3
+r4 ansible_host=192.168.200.4
+r5 ansible_host=192.168.200.5
+
+
+
+
+
+
+
+[host]
+host1 ansible_host=192.168.200.11
+host2 ansible_host=192.168.200.12
+
+
+[all:vars]
+ansible_user=cumulus
+ansible_ssh_pass=CumulusLinux!
