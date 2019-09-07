@@ -17,7 +17,7 @@
     state: present
 
 - name: Add MPLS Routes to host1
-  command: ip route add 192.168.22.222/32 encap mpls 103 via inet 192.168.11.1
+  command: ip route add 192.168.22.222/32 encap mpls 105 via inet 192.168.11.1
   when: inventory_hostname == "host1"
 
 - name: Add MPLS Routes to host2
