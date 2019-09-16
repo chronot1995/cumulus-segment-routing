@@ -200,7 +200,7 @@ end
   config.vm.define "oob-mgmt-switch" do |device|
 
     device.vm.hostname = "oob-mgmt-switch"
-    device.vm.box_version = "3.7.8"
+    device.vm.box_version = "3.7.9"
     device.vm.box = "CumulusCommunity/cumulus-vx"
 
     device.vm.provider :libvirt do |v|
@@ -387,7 +387,7 @@ end
     device.vm.hostname = "r1"
 
     device.vm.box = "CumulusCommunity/cumulus-vx"
-    device.vm.box_version = "3.7.8"
+    device.vm.box_version = "3.7.9"
 
     device.vm.provider :libvirt do |v|
       v.memory = 1024
@@ -500,7 +500,7 @@ end
     device.vm.hostname = "r2"
 
     device.vm.box = "CumulusCommunity/cumulus-vx"
-    device.vm.box_version = "3.7.8"
+    device.vm.box_version = "3.7.9"
 
     device.vm.provider :libvirt do |v|
       v.memory = 1024
@@ -613,7 +613,7 @@ end
     device.vm.hostname = "r3"
 
     device.vm.box = "CumulusCommunity/cumulus-vx"
-    device.vm.box_version = "3.7.8"
+    device.vm.box_version = "3.7.9"
 
     device.vm.provider :libvirt do |v|
       v.memory = 1024
@@ -726,7 +726,7 @@ end
     device.vm.hostname = "r4"
 
     device.vm.box = "CumulusCommunity/cumulus-vx"
-    device.vm.box_version = "3.7.8"
+    device.vm.box_version = "3.7.9"
 
     device.vm.provider :libvirt do |v|
       v.memory = 1024
@@ -825,7 +825,7 @@ end
     device.vm.hostname = "r5"
 
     device.vm.box = "CumulusCommunity/cumulus-vx"
-    device.vm.box_version = "3.7.8"
+    device.vm.box_version = "3.7.9"
 
     device.vm.provider :libvirt do |v|
       v.memory = 1024
