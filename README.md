@@ -50,7 +50,9 @@ First, make sure that the following is currently running on your machine:
 
 1. Copy the Git repo to your local machine:
 
-    ```git clone https://github.com/chronot1995/cumulus-segment-routing```
+```
+git clone https://github.com/chronot1995/cumulus-segment-routing
+```
 
 2. Change directories to the following
 
@@ -256,7 +258,7 @@ ansible-playbook cumulus-segment-routing-relaxed.yml
 
 After the above command is executed, the following configuration changes are necessary:
 
-4. Within ""vx-simulation/helper_scripts/auto_mgmt_network/OOB_Server_Config_auto_mgmt.sh""
+4. Within "<vx-sim>/helper_scripts/auto_mgmt_network/OOB_Server_Config_auto_mgmt.sh"
 
 The following stanza:
 
