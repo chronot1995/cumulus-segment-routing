@@ -54,15 +54,20 @@ First, make sure that the following is currently running on your machine:
 
 2. Change directories to the following
 
-    ```cumulus-segment-routing```
+```
+    cumulus-segment-routing
+```
 
 3a. Run the following for Virtualbox:
 
-    ```./start-vagrant-vbox-poc.sh```
+```
+   ./start-vagrant-vbox-poc.sh
+```
 
 3b. Run the following for Libvirt:
-
-    ```./start-vagrant-libvirt-poc.sh```
+```
+    ./start-vagrant-libvirt-poc.sh
+```
 
 ### Running the Ansible Playbook
 
