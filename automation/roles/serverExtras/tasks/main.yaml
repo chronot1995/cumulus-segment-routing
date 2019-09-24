@@ -6,10 +6,10 @@
     update_cache: yes
 
 ## Specific to Ubuntu 18 LTS:
-- name: Remove ifupdown1 and netplan
-  apt:
-    name: ['ifupdown','ifenslave','netplan.io']
-    state: absent
+#- name: Remove ifupdown1 and netplan
+#  apt:
+#    name: ['ifupdown','ifenslave','netplan.io']
+#    state: absent
 
 ## Add the mpls_iptunnel module
 - modprobe:
