@@ -221,12 +221,14 @@ default via 10.0.2.2 dev vagrant
 
 3. The following command was used to run the Topology Converter within the appropriate vx-sim directory:
 
-    ```./topology_converter.py cumulus-segment-routing.dot -c --provider=virtualbox```
-    ```./topology_converter.py cumulus-segment-routing.dot -c --provider=libvirt```
+```
+     ./topology_converter.py cumulus-segment-routing.dot -c --provider=virtualbox
+     ./topology_converter.py cumulus-segment-routing.dot -c --provider=libvirt
+```
 
 After the above command is executed, the following configuration changes are necessary:
 
-4. Within ```vx-simulation/helper_scripts/auto_mgmt_network/OOB_Server_Config_auto_mgmt.sh```
+4. Within ""vx-simulation/helper_scripts/auto_mgmt_network/OOB_Server_Config_auto_mgmt.sh""
 
 The following stanza:
 
