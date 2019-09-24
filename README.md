@@ -224,6 +224,19 @@ default via 10.0.2.2 dev vagrant
 192.168.200.0/24 dev eth0 proto kernel scope link src 192.168.200.11
 ```
 
+To execute the above commands strict LSR configuration, run the following playbook from the automation directory:
+
+```
+ansible-playbook cumulus-segment-routing-strict.yml
+```
+
+To reset the demo back to a relaxed LSR configuration, run the following playbook from the automation directory:
+
+```
+ansible-playbook cumulus-segment-routing-relaxed.yml
+```
+
+
 ### Errata
 
 1. To shutdown the demo, run the following command from the vx-simulation directory:
