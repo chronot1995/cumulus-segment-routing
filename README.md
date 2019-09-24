@@ -250,7 +250,7 @@ Will be replaced with the following:
     #Install Automation Tools
     puppet=0
     ansible=1
-    ansible_version=2.8.4
+    ansible_version=2.8.5
 
 Add the following ```echo``` right before the end of the file.
 
