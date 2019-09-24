@@ -4,8 +4,8 @@ graph training {
  "r3" [function="leaf" os="CumulusCommunity/cumulus-vx" version="3.7.8" memory="1024" config="./helper_scripts/extra_switch_config.sh" mgmt_ip="192.168.200.3"]
  "r4" [function="leaf" os="CumulusCommunity/cumulus-vx" version="3.7.8" memory="1024" config="./helper_scripts/extra_switch_config.sh" mgmt_ip="192.168.200.4"]
  "r5" [function="leaf" os="CumulusCommunity/cumulus-vx" version="3.7.8" memory="1024" config="./helper_scripts/extra_switch_config.sh" mgmt_ip="192.168.200.5"]
- "host1" [function="host" os="generic/ubuntu1804" memory="768" config="./helper_scripts/extra_server_config.sh" mgmt_ip="192.168.200.11"]
- "host2" [function="host" os="generic/ubuntu1804" memory="768" config="./helper_scripts/extra_server_config.sh" mgmt_ip="192.168.200.12"]
+ "host1" [function="host" os="yk0/ubuntu-xenial" memory="768" config="./helper_scripts/extra_server_config.sh" mgmt_ip="192.168.200.11"]
+ "host2" [function="host" os="yk0/ubuntu-xenial" memory="768" config="./helper_scripts/extra_server_config.sh" mgmt_ip="192.168.200.12"]
 
  "r1":"swp2" -- "r2":"swp1"
  "r1":"swp4" -- "r4":"swp1"

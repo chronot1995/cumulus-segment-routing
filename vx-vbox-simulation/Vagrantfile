@@ -91,7 +91,7 @@ SCRIPT
 
 Vagrant.configure("2") do |config|
 
-  simid = 1567833894
+  simid = 1569337309
 
   config.vm.provider "virtualbox" do |v|
     v.gui=false
@@ -764,7 +764,7 @@ end
 
     device.vm.hostname = "host1"
 
-    device.vm.box = "generic/ubuntu1804"
+    device.vm.box = "yk0/ubuntu-xenial"
     device.vm.provider "virtualbox" do |v|
       v.name = "#{simid}_host1"
       v.customize ["modifyvm", :id, '--audiocontroller', 'AC97', '--audio', 'Null']
@@ -838,7 +838,7 @@ end
 
     device.vm.hostname = "host2"
 
-    device.vm.box = "generic/ubuntu1804"
+    device.vm.box = "yk0/ubuntu-xenial"
     device.vm.provider "virtualbox" do |v|
       v.name = "#{simid}_host2"
       v.customize ["modifyvm", :id, '--audiocontroller', 'AC97', '--audio', 'Null']

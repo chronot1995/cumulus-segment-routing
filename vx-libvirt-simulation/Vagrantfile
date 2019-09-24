@@ -200,9 +200,9 @@ end
   config.vm.define "oob-mgmt-switch" do |device|
 
     device.vm.hostname = "oob-mgmt-switch"
-    device.vm.box_version = "3.7.9"
-    device.vm.box = "CumulusCommunity/cumulus-vx"
 
+    device.vm.box = "CumulusCommunity/cumulus-vx"
+    device.vm.box_version = "3.7.9"
     device.vm.provider :libvirt do |v|
       v.memory = 512
     end
@@ -937,7 +937,7 @@ end
 
     device.vm.hostname = "host1"
 
-    device.vm.box = "generic/ubuntu1804"
+    device.vm.box = "yk0/ubuntu-xenial"
 
     device.vm.provider :libvirt do |v|
       v.nic_model_type = 'e1000'
@@ -1021,7 +1021,7 @@ end
 
     device.vm.hostname = "host2"
 
-    device.vm.box = "generic/ubuntu1804"
+    device.vm.box = "yk0/ubuntu-xenial"
 
     device.vm.provider :libvirt do |v|
       v.nic_model_type = 'e1000'
