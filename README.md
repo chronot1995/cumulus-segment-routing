@@ -73,17 +73,17 @@ First, make sure that the following is currently running on your machine:
 
 1a. SSH into the Virtualbox oob-mgmt-server:
 
-    ```
+```
     cd vx-vbox-simulation
     vagrant ssh oob-mgmt-server
-    ```
+```
 
 1a. SSH into the Libvirt oob-mgmt-server:
 
-    ```
+```
     cd vx-libvirt-simulation  
     vagrant ssh oob-mgmt-server
-    ```
+```
 
 2. Copy the Git repo unto the oob-mgmt-server:
 
