@@ -2,7 +2,7 @@
 
 ### Summary:
 
-  - Cumulus Linux 3.7.8
+  - Cumulus Linux 3.7.9
   - Underlying Topology Converter to 4.7.0
   - Tested against Vagrant 2.1.5 on Mac and Linux. Windows is not supported.
   - Tested against Virtualbox 5.2.32 on Mac 10.14
