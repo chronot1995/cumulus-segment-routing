@@ -1,0 +1,11 @@
+---
+
+- name: Remove Strict MPLS LSR on host1
+  command: sudo ip route del 192.168.22.222/32 encap mpls 104/105/103 via inet 192.168.11.1
+  when: inventory_hostname == "host2"
+
+- name: Add Relaxed MPLS LSR on host1
+  command: ip route add 192.168.22.222/32 encap mpls 103 via inet 192.168.11.1
+
+- name: Flush Handlers, best practice
+  meta: flush_handlers
